@@ -21,6 +21,7 @@ import java.util.Scanner;
 
 public class My_To_Do_List_Main_Activity extends AppCompatActivity {
 
+    // Properties of the class...
     private EditText userInput;
     private ArrayList<String> toDoItems;
     private ArrayAdapter theAdapter;
@@ -37,9 +38,9 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
         setContentView(R.layout.my_to_do_list_main_activity);
 
         userInput = (EditText) findViewById(R.id.user_input);
-
         toDoItems = new ArrayList<String>();
         retrieveToDoItems();
+
         theAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, toDoItems);
         //theAdapter = new MyCustomAdapter(this, toDoItems);
         ListView theListView = (ListView) findViewById(R.id.the_listView);
@@ -48,7 +49,7 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
         ttsObject = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-
+                // Check if the text-to-speech object is successfully created.
                 if(status == TextToSpeech.SUCCESS) {
                     result = ttsObject.setLanguage(Locale.ENGLISH);
                 }
@@ -61,7 +62,8 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
         theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                // If the user clicks on a ListView item (i.e. a to-do item), make the text-to-speech
+                // object speak it aloud (only if the text-to-speech object is successfully created).
                 if(result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
                     Toast.makeText(getApplicationContext(), R.string.text_tts_not_supported, Toast.LENGTH_SHORT).show();
                 } else {
@@ -74,10 +76,13 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
         theListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // If the user long-clicks on a ListView item (i.e. a to-do item), delete the
+                // corresponding to-do item from both the ArrayList that holds all the to-do items
+                // and the file that is saved to de device's storage.
                 String toDoItemSelected = String.valueOf(parent.getItemAtPosition(position));
                 removeToDoItemFromArrayList(toDoItemSelected);
                 writeToDoItemsToFile();
-                ttsObject.speak("Item deleted", TextToSpeech.QUEUE_FLUSH, null);
+                ttsObject.speak(getString(R.string.text_item_deleted), TextToSpeech.QUEUE_FLUSH, null);
                 return false;
             }
         });
@@ -108,6 +113,8 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
     //-----------------------------------------------------------------------------
 
     private void retrieveToDoItems() {
+        // Retrieve the to-do items from the file that is saved to the device's storage and add
+        // them to the ArrayList that holds all the to-do items.
         try {
             Scanner scan = new Scanner(openFileInput(keyToDoItemsFile));
             String line;
@@ -124,6 +131,7 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
     //-----------------------------------------------------------------------------
 
     public void addToDoItem(View view) {
+        // This method is called when the user clicks the 'ADD' button.
         String toDoItem = String.valueOf(userInput.getText());
         userInput.setText("");
         addToDoItemToArrayList(toDoItem);
@@ -133,9 +141,13 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
     //-----------------------------------------------------------------------------
 
     private void addToDoItemToArrayList(String toDoItem) {
+        // Add the to-do item to the ArrayList that holds all the do-do items.
+
+        // Check for duplicates.
         if(toDoItems.contains(toDoItem)) {
             Toast.makeText(this, R.string.text_duplicate_item, Toast.LENGTH_SHORT).show();
         }
+        // Check for empty to-do item.
         else if (toDoItem.equals("")) {
             Toast.makeText(this, R.string.text_empty_item, Toast.LENGTH_SHORT).show();
         }
@@ -148,6 +160,8 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
     //-----------------------------------------------------------------------------
 
     private void writeToDoItemToFile(String toDoItem) {
+        // Write the to-do item to the file that is saved to the device's storage.
+        // NOTE: use 'MODE_APPEND' to append the to-do item to the file.
         try {
             PrintStream out = new PrintStream(openFileOutput(keyToDoItemsFile, MODE_APPEND));
             out.println(toDoItem);
@@ -161,6 +175,7 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
     //-----------------------------------------------------------------------------
 
     private void removeToDoItemFromArrayList(String toDoItem) {
+        // Remove the to-do item from the ArrayList that holds all the do-do items.
         toDoItems.remove(toDoItem);
         theAdapter.notifyDataSetChanged();
     }
@@ -168,6 +183,10 @@ public class My_To_Do_List_Main_Activity extends AppCompatActivity {
     //-----------------------------------------------------------------------------
 
     private void writeToDoItemsToFile() {
+        // Write all the to-do items that are stored in the ArrayList that holds all the to-do items
+        // to the file that is saved to the device's storage.
+        // NOTE: use MODE_PRIVATE to overwrite the file's content (this prevents the use of a
+        // temporary file).
         try {
             PrintStream out = new PrintStream(openFileOutput(keyToDoItemsFile, MODE_PRIVATE));
             for(int i=0; i < toDoItems.size(); i++) {

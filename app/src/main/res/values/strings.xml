@@ -1,14 +1,16 @@
 <resources>
-    <string name="app_name">My To Do List</string>
+    <string name="app_name">My To-Do List</string>
 
     <string name="action_settings">Settings</string>
-    <string name="text_header_main_activity">TO-DO-LIST-APP!</string>
+    <string name="text_header_main_activity">TO-DO LIST!</string>
+    <string name="text_hint_user_input">Enter a to-do...</string>
     <string name="text_add_button">ADD</string>
-    <string name="text_no_to_dos">No to-do\'s on your to-do list.</string>
-    <string name="text_error_writing_to_do_item_to_storage">Error writing to-do\'s to storage.</string>
+    <string name="text_no_to_dos">Error retrieving to-do\'s.</string>
+    <string name="text_error_writing_to_do_item_to_storage">Error writing to-do\'s to device\'s storage.</string>
     <string name="text_duplicate_item">To-do is already on your to-do list.</string>
     <string name="text_empty_item">Empty to-do.</string>
-    <string name="text_tts_not_supported">Feature not supported on your mobile device.</string>
+    <string name="text_tts_not_supported">This feature is not supported on your mobile device.</string>
+    <string name="text_item_deleted">Item deleted.</string>
     <string name="text_description_row_imageView">Image.</string>
 
 </resources>
