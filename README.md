@@ -1,4 +1,4 @@
-Vincent Erich (<10384081>)
+Vincent Erich (<vincent.erich@live.nl>)
 
 TO-DO LIST 1.0 - The application is a simple to-do list. Initially, the application is empty and
 has nothing in the to-do list. If the user types text into the bottom EditText and clicks the 'ADD'
